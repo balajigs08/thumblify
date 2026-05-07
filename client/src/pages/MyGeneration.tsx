@@ -29,7 +29,7 @@ const MyGeneration = () => {
     try {
 
       const { data } = await axios.get(
-        "http://localhost:3000/api/user/thumbnails",
+        "https://thumblify-server-drab.vercel.app/api/user/thumbnails",
         {
           withCredentials: true,
         }
@@ -65,7 +65,7 @@ const MyGeneration = () => {
     try {
 
       await axios.delete(
-        `http://localhost:3000/api/thumbnail/delete/${id}`,
+        `https://thumblify-server-drab.vercel.app/api/thumbnail/delete/${id}`,
         {
           withCredentials: true,
         }
@@ -149,7 +149,7 @@ const MyGeneration = () => {
               const fullImageUrl =
                 thumb.image_url?.startsWith("http")
                   ? thumb.image_url
-                  : `http://localhost:3000${thumb.image_url}`;
+                  : `https://thumblify-server-drab.vercel.app${thumb.image_url}`;
 
               return (
 
