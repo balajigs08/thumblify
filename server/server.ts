@@ -26,22 +26,19 @@ await connectDB();
 
 const app = express();
 
+// ✅ TRUST PROXY
+app.set("trust proxy", 1);
+
 // ✅ CORS
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:3000",
-      "https://thumblify-beta.vercel.app",
-    ],
+    origin: true,
     credentials: true,
   })
 );
 
 // ✅ BODY PARSER
 app.use(express.json());
-
-app.set("trust proxy", 1);
 
 // ✅ SESSION
 app.use(
