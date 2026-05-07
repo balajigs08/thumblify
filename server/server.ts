@@ -32,7 +32,11 @@ app.set("trust proxy", 1);
 // ✅ CORS
 app.use(
   cors({
-    origin: true,
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3000",
+      "https://thumblify-virid.vercel.app",
+    ],
     credentials: true,
   })
 );
@@ -59,14 +63,9 @@ app.use(
 
       httpOnly: true,
 
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
 
-      sameSite:
-        process.env.NODE_ENV === "production"
-          ? "none"
-          : "lax",
-
-      path: "/",
+      sameSite: "none",
     },
   })
 );
