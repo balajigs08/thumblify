@@ -41,6 +41,8 @@ app.use(
 // ✅ BODY PARSER
 app.use(express.json());
 
+app.set('trust proxy', 1);
+
 // ✅ SESSION
 app.use(
   session({
