@@ -13,7 +13,6 @@ import AuthRouter from "./routes/AuthRoutes.js";
 import ThumbnailRouter from "./routes/ThumbnailRoutes.js";
 import UserRouter from "./routes/UserRoutes.js";
 
-
 // ✅ SESSION TYPES
 declare module "express-session" {
   interface SessionData {
@@ -32,7 +31,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:3000", "https://thumblify-rosy-tau.vercel.app"
+      "http://localhost:3000",
+      "https://thumblify-rosy-tau.vercel.app",
     ],
     credentials: true,
   })
@@ -58,11 +58,13 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
 
-      secure: false,
-
       httpOnly: true,
 
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+
+      sameSite: "none",
+
+      path: "/",
     },
   })
 );
@@ -81,7 +83,5 @@ app.use("/api/user", UserRouter);
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  console.log(
-    `🚀 Server running at http://localhost:${port}`
-  );
+  console.log(`🚀 Server running at http://localhost:${port}`);
 });
