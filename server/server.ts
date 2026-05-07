@@ -32,7 +32,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:3000",
-      "https://thumblify-rosy-tau.vercel.app",
+      "https://thumblify-beta.vercel.app",
     ],
     credentials: true,
   })
@@ -41,7 +41,7 @@ app.use(
 // ✅ BODY PARSER
 app.use(express.json());
 
-app.set('trust proxy', 1);
+app.set("trust proxy", 1);
 
 // ✅ SESSION
 app.use(
@@ -64,7 +64,10 @@ app.use(
 
       secure: process.env.NODE_ENV === "production",
 
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite:
+        process.env.NODE_ENV === "production"
+          ? "none"
+          : "lax",
 
       path: "/",
     },
