@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { useParams } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
@@ -16,6 +18,10 @@ import {
 } from "../assets/assets";
 
 const Generate = () => {
+
+  // ================= URL PARAM =================
+
+  const { id } = useParams();
 
   // ================= STATES =================
 
@@ -42,6 +48,55 @@ const Generate = () => {
   const [styleDropdownOpen, setStyleDropdownOpen] =
     useState(false);
 
+  // ================= FETCH THUMBNAIL =================
+
+  useEffect(() => {
+
+    const fetchThumbnail = async () => {
+
+      try {
+
+        if (!id) return;
+
+        const { data } = await api.get(
+          `/user/thumbnail/${id}`
+        );
+
+        const thumb = data.thumbnail;
+
+        if (thumb) {
+
+          setTitle(thumb.title || "");
+
+          setAdditionalDetails(
+            thumb.user_prompt || ""
+          );
+
+          setStyle(
+            thumb.style || "Bold & Graphic"
+          );
+
+          setAspectRatio(
+            thumb.aspect_ratio || "16:9"
+          );
+
+          setColorSchemeId(
+            thumb.color_scheme || "vibrant"
+          );
+
+          setThumbnail(thumb);
+        }
+
+      } catch (error) {
+
+        console.log(error);
+      }
+    };
+
+    fetchThumbnail();
+
+  }, [id]);
+
   // ================= GENERATE =================
 
   const handleGenerate = async () => {
@@ -58,6 +113,7 @@ const Generate = () => {
       setLoading(true);
 
       // ✅ PAYLOAD
+
       const api_payload = {
 
         title,
@@ -74,6 +130,7 @@ const Generate = () => {
       };
 
       // ✅ API CALL
+
       const { data } = await api.post(
 
         "/thumbnail/generate",
@@ -84,12 +141,15 @@ const Generate = () => {
       console.log(data);
 
       // ✅ SET THUMBNAIL
+
       if (data.thumbnail) {
 
         setThumbnail(data.thumbnail);
 
         toast.success(
+
           data.message ||
+
           "Thumbnail Generated"
         );
 
