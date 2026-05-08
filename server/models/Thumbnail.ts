@@ -1,7 +1,8 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document } from "mongoose";
 
 export interface IThumbnail extends Document {
-  userId: mongoose.Types.ObjectId;
+
+  userId: string;
 
   title: string;
 
@@ -44,8 +45,8 @@ export interface IThumbnail extends Document {
 const ThumbnailSchema = new mongoose.Schema<IThumbnail>(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
+      ref: "User",
       required: true,
     },
 
@@ -99,7 +100,7 @@ const ThumbnailSchema = new mongoose.Schema<IThumbnail>(
 
     image_url: {
       type: String,
-      default: '',
+      default: "",
     },
 
     prompt_used: {
@@ -115,13 +116,11 @@ const ThumbnailSchema = new mongoose.Schema<IThumbnail>(
       default: true,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 const Thumbnail =
   mongoose.models.Thumbnail ||
-  mongoose.model<IThumbnail>('Thumbnail', ThumbnailSchema);
+  mongoose.model<IThumbnail>("Thumbnail", ThumbnailSchema);
 
 export default Thumbnail;
