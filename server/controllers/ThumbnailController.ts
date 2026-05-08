@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-
 import Thumbnail from "../models/Thumbnail.js";
 
 // 🎨 STYLE PROMPTS
@@ -34,13 +33,16 @@ export const generateThumbnail = async (
 
     const { userId } = req.session;
 
+    // ✅ CHECK LOGIN
     if (!userId) {
 
       return res.status(401).json({
+        success: false,
         message: "Unauthorized",
       });
     }
 
+    // ✅ GET DATA
     const {
       title,
       prompt,
@@ -50,61 +52,64 @@ export const generateThumbnail = async (
       text_overlay,
     } = req.body;
 
+    // ✅ VALIDATION
     if (!title) {
 
       return res.status(400).json({
+        success: false,
         message: "Title is required",
       });
     }
 
     // ✅ FINAL PROMPT
-
     const finalPrompt = `
-      ${stylePrompts[style] || ""},
-      ${title},
-      ${prompt || ""},
-      youtube thumbnail,
-      cinematic,
-      high quality,
-      trending,
+      ${stylePrompts[style] || ""}
+      ${title}
+      ${prompt || ""}
+      youtube thumbnail
+      cinematic lighting
       ultra detailed
+      trending thumbnail
+      high quality
     `;
 
-    // ✅ POLLINATIONS IMAGE
-
+    // ✅ POLLINATIONS IMAGE URL
     const imageUrl =
       `https://image.pollinations.ai/prompt/${encodeURIComponent(
         finalPrompt
       )}?width=1280&height=720&nologo=true`;
 
-    console.log("✅ IMAGE:", imageUrl);
+    console.log("✅ GENERATED IMAGE:", imageUrl);
 
-    // ✅ SAVE
+    // ✅ SAVE TO DATABASE
+    const thumbnail = await Thumbnail.create({
 
-    const thumbnail =
-      await Thumbnail.create({
+      userId,
 
-        userId,
+      title,
 
-        title,
+      description: prompt || "",
 
-        prompt_used: finalPrompt,
+      style,
 
-        style,
+      aspect_ratio,
 
-        aspect_ratio,
+      color_scheme,
 
-        color_scheme,
+      text_overlay,
 
-        text_overlay,
+      image_url: imageUrl,
 
-        image_url: imageUrl,
+      prompt_used: finalPrompt,
 
-        isGenerating: false,
-      });
+      user_prompt: prompt || "",
+
+      isGenerating: false,
+    });
+
+    console.log("✅ SAVED IN DB");
 
     // ✅ RESPONSE
-
     return res.status(200).json({
 
       success: true,
@@ -114,7 +119,7 @@ export const generateThumbnail = async (
 
   } catch (error: any) {
 
-    console.log(error);
+    console.log("❌ THUMBNAIL ERROR:", error);
 
     return res.status(500).json({
 
@@ -128,7 +133,7 @@ export const generateThumbnail = async (
 };
 
 // ======================================================
-// ❌ DELETE
+// ❌ DELETE THUMBNAIL
 // ======================================================
 
 export const deleteThumbnail = async (
@@ -147,6 +152,8 @@ export const deleteThumbnail = async (
     });
 
   } catch (error: any) {
+
+    console.log(error);
 
     return res.status(500).json({
 
