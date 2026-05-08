@@ -13,7 +13,7 @@ import AuthRouter from "./routes/AuthRoutes.js";
 import ThumbnailRouter from "./routes/ThumbnailRoutes.js";
 import UserRouter from "./routes/UserRoutes.js";
 
-// ✅ SESSION TYPES
+// SESSION TYPES
 declare module "express-session" {
   interface SessionData {
     isLoggedIn: boolean;
@@ -21,15 +21,12 @@ declare module "express-session" {
   }
 }
 
-// ✅ CONNECT DATABASE
-await connectDB();
-
 const app = express();
 
-// ✅ TRUST PROXY
+// TRUST PROXY
 app.set("trust proxy", 1);
 
-// ✅ CORS
+// CORS
 app.use(
   cors({
     origin: [
@@ -41,10 +38,10 @@ app.use(
   })
 );
 
-// ✅ BODY PARSER
+// BODY PARSER
 app.use(express.json());
 
-// ✅ SESSION
+// SESSION
 app.use(
   session({
     secret: process.env.SESSION_SECRET as string,
@@ -60,29 +57,39 @@ app.use(
 
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-
       httpOnly: true,
-
       secure: true,
-
       sameSite: "none",
     },
   })
 );
 
-// ✅ TEST ROUTE
+// TEST ROUTE
 app.get("/", (req: Request, res: Response) => {
   res.send("🚀 Server is Live!");
 });
 
-// ✅ ROUTES
+// ROUTES
 app.use("/api/auth", AuthRouter);
 app.use("/api/thumbnail", ThumbnailRouter);
 app.use("/api/user", UserRouter);
 
-// ✅ START SERVER
-const port = process.env.PORT || 3000;
+// CONNECT DB + START SERVER
+const startServer = async () => {
+  try {
+    await connectDB();
 
-app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
-});
+    const port = process.env.PORT || 3000;
+
+    app.listen(port, () => {
+      console.log(`🚀 Server running on port ${port}`);
+    });
+
+  } catch (error) {
+    console.log("Database connection failed:", error);
+  }
+};
+
+startServer();
+
+export default app;
