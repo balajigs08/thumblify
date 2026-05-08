@@ -81,6 +81,22 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ---
 
+## 🚀 Deployment
+
+- Frontend deployed on Vercel
+- Backend deployed on Vercel
+- Database hosted on MongoDB Atlas
+
+---
+
+## 🤖 APIs Used
+
+- Pollinations AI API
+- Gemini API
+- Cloudinary API
+
+---
+
 ## 👨‍💻 Author
 
 BALAJI G S
