@@ -1,7 +1,10 @@
 import { Request, Response } from 'express';
 import Thumbnail from '../models/Thumbnail.js';
 
-// Controllers to get All User Thumbnails
+// ======================================================
+// GET ALL USER THUMBNAILS
+// ======================================================
+
 export const getUsersThumbnails = async (
   req: Request,
   res: Response
@@ -11,12 +14,25 @@ export const getUsersThumbnails = async (
 
     const { userId } = req.session;
 
+    // ✅ CHECK LOGIN
+    if (!userId) {
+
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    // ✅ FETCH THUMBNAILS
     const thumbnails = await Thumbnail.find({
-      userId
+      userId,
     }).sort({ createdAt: -1 });
 
-    res.json({
+    // ✅ RESPONSE
+    return res.json({
+
       success: true,
+
       thumbnails,
     });
 
@@ -24,14 +40,19 @@ export const getUsersThumbnails = async (
 
     console.log(error);
 
-    res.status(500).json({
+    return res.status(500).json({
+
       success: false,
+
       message: error.message,
     });
   }
 };
 
-// Controllers to get single Thumbnail of a User
+// ======================================================
+// GET SINGLE THUMBNAIL
+// ======================================================
+
 export const getThumbnailById = async (
   req: Request,
   res: Response
@@ -43,13 +64,39 @@ export const getThumbnailById = async (
 
     const { id } = req.params;
 
+    // ✅ CHECK LOGIN
+    if (!userId) {
+
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    // ✅ FIND THUMBNAIL
     const thumbnail = await Thumbnail.findOne({
+
       userId,
+
       _id: id,
     });
 
-    res.json({
+    // ✅ NOT FOUND
+    if (!thumbnail) {
+
+      return res.status(404).json({
+
+        success: false,
+
+        message: "Thumbnail not found",
+      });
+    }
+
+    // ✅ RESPONSE
+    return res.json({
+
       success: true,
+
       thumbnail,
     });
 
@@ -57,8 +104,10 @@ export const getThumbnailById = async (
 
     console.log(error);
 
-    res.status(500).json({
+    return res.status(500).json({
+
       success: false,
+
       message: error.message,
     });
   }
