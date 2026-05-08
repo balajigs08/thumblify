@@ -83,4 +83,4 @@ CLOUDINARY_API_SECRET=your_api_secret
 
 ## 👨‍💻 Author
 
-Balaji GS
+BALAJI G S
