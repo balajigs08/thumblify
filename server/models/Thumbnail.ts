@@ -1,28 +1,64 @@
 import mongoose, { Document } from 'mongoose';
 
 export interface IThumbnail extends Document {
-  userId: string;
+  userId: mongoose.Types.ObjectId;
+
   title: string;
+
   description?: string;
-  style: "Bold & Graphic" | "Tech/Futuristic" | "Minimalist" | "Photorealistic" | "Illustrated";
+
+  style:
+    | "Bold & Graphic"
+    | "Tech/Futuristic"
+    | "Minimalist"
+    | "Photorealistic"
+    | "Illustrated";
+
   aspect_ratio?: "16:9" | "1:1" | "9:16";
-  color_scheme?: "vibrant" | "sunset" | "forest" | "neon" | "purple" | "monochrome" | "ocean" | "pastel";
+
+  color_scheme?:
+    | "vibrant"
+    | "sunset"
+    | "forest"
+    | "neon"
+    | "purple"
+    | "monochrome"
+    | "ocean"
+    | "pastel";
+
   text_overlay?: boolean;
+
   image_url?: string;
+
   prompt_used?: string;
+
   user_prompt?: string;
+
   isGenerating?: boolean;
+
   createdAt?: Date;
+
   updatedAt?: Date;
 }
 
 const ThumbnailSchema = new mongoose.Schema<IThumbnail>(
   {
-    userId: { type: String, ref: 'User', required: true },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
 
-    title: { type: String, required: true, trim: true },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-    description: { type: String, trim: true },
+    description: {
+      type: String,
+      trim: true,
+    },
 
     style: {
       type: String,
@@ -32,14 +68,14 @@ const ThumbnailSchema = new mongoose.Schema<IThumbnail>(
         "Tech/Futuristic",
         "Minimalist",
         "Photorealistic",
-        "Illustrated"
-      ]
+        "Illustrated",
+      ],
     },
 
     aspect_ratio: {
       type: String,
       enum: ["16:9", "1:1", "9:16"],
-      default: "16:9"
+      default: "16:9",
     },
 
     color_scheme: {
@@ -52,34 +88,36 @@ const ThumbnailSchema = new mongoose.Schema<IThumbnail>(
         "purple",
         "monochrome",
         "ocean",
-        "pastel"
-      ]
+        "pastel",
+      ],
     },
 
     text_overlay: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     image_url: {
       type: String,
-      default: ''
+      default: '',
     },
 
     prompt_used: {
-      type: String
+      type: String,
     },
 
     user_prompt: {
-      type: String
+      type: String,
     },
 
     isGenerating: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
 const Thumbnail =
