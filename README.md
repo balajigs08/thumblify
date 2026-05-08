@@ -1,6 +1,6 @@
 # Thumblify 🚀
 
-AI-powered YouTube Thumbnail Generator built using MERN Stack.
+Build an AI Thumbnail Generator App using React | MERN Stack + Pollinations AI API, Gemini API
 
 ## 🌐 Live Demo
 
